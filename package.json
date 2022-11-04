@@ -1,0 +1,27 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SQUASHD/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SQUASHD/battleship/issues"
+  },
+  "homepage": "https://github.com/SQUASHD/battleship#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "eslint": "^8.26.0",
+    "jest": "^29.2.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
