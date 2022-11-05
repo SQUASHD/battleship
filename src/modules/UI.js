@@ -28,6 +28,7 @@ class UI {
 
   static generateApp() {
     UI.generateBoards();
+    UI.initPlacementListeners();
   }
 
   static generateBoards() {
@@ -57,7 +58,7 @@ class UI {
       }
     }
   }
-  initPlacementListeners() {
+  static initPlacementListeners() {
     const playerBoard = document.getElementById('playerBoard');
     const boardSquares = playerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
@@ -68,7 +69,7 @@ class UI {
       });
     });
   }
-  removePlacementListeners() {
+  static removePlacementListeners() {
     const playerBoard = document.getElementById('playerBoard');
     const boardSquares = playerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
@@ -79,7 +80,7 @@ class UI {
       });
     });
   }
-  initAttackListeners() {
+  static initAttackListeners() {
     const computerBoard = document.getElementById('computerBoard');
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
