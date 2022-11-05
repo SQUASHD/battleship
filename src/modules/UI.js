@@ -144,6 +144,7 @@ class UI {
         Game.checkGameOver(playerBoard, computerboard);
         if (Game.isGameOver()) {
           UI.displayResult('You Win');
+          return
         }
         if (!Game.isGameOver()) {
           UI.computerTurn(computer, playerBoard, playerReferenceBoard);
@@ -152,6 +153,7 @@ class UI {
         Game.checkGameOver(playerBoard, computerboard);
         if (Game.isGameOver()) {
           UI.displayResult('You Lose!');
+          return
         }
       });
     });
