@@ -1,7 +1,7 @@
 import Ship from "./Ship";
 
 class Gameboard {
-  constructor(boardSize = 7) {
+  constructor(boardSize = 10) {
     this.board = Gameboard.createBoard(boardSize);
     this.ships = [];
   }
