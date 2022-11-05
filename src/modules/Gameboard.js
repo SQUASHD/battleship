@@ -1,4 +1,4 @@
-import Ship from "./Ship";
+import Ship from './Ship';
 
 class Gameboard {
   constructor(boardSize = 10) {
@@ -35,7 +35,9 @@ class Gameboard {
     }
   }
   allShipsSunk() {
-    return this.board.every(row => row.every(space => space === 'empty' || space === 'miss' || space.isSunk()));
+    return this.board.every((row) =>
+      row.every((space) => space === 'empty' || space === 'miss' || space.isSunk())
+    );
   }
 }
 

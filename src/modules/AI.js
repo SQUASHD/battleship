@@ -18,7 +18,7 @@ class AI {
     if (noMoreMoves(this.moveList)) {
       return null;
     }
-    
+
     let x = Math.floor(Math.random() * this.moveList.length);
     let y = Math.floor(Math.random() * this.moveList.length);
     while (this.moveList[x][y] !== 'none') {
@@ -30,7 +30,7 @@ class AI {
     return [x, y];
 
     function noMoreMoves(moveList) {
-      return moveList.every(row => row.every(space => space !== 'none'));
+      return moveList.every((row) => row.every((space) => space !== 'none'));
     }
   }
 }

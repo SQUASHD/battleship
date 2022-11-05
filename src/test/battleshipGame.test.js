@@ -1,4 +1,5 @@
 import Game from '../modules/battleshipGame';
+import Ship from '../modules/Ship';
 
 describe('Game functions and attributes at startup', () => {
   let game;
@@ -29,10 +30,10 @@ describe('Game functions during set up', () => {
   });
   it('can place ships on the player board', () => {
     game.placePlayerShips();
-    expect(game.playerBoard.ships.length).toBe(5);
+    expect(game.playerBoard.allShipsSunk()).toBe(false);
   });
   it('can place ships on the computer board', () => {
     game.placeComputerShips();
-    expect(game.computerBoard.ships.length).toBe(5);
+    expect(game.computerBoard.allShipsSunk()).toBe(false);
   });
 });
