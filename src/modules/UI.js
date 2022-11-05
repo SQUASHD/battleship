@@ -1,34 +1,24 @@
 import Gameboard from './gameboard';
 import Ship from './Ship';
+import Game from './Game';
 
 class UI {
   constructor() {
     this.playerReferenceBoard = Gameboard.createBoard(10, null);
     this.computerReferenceBoard = Gameboard.createBoard(10, null);
   }
-  updateReferenceBoard(boardObject, displayBoard, i, j) {
-    if (boardObject[i][j] === 'empty') {
-      displayBoard[i][j] = 'miss';
-    } else if (boardObject[i][j] instanceof Ship) {
-      displayBoard[i][j] = 'hit';
-    } else if (boardObject[i][j].isSunk() === true) {
-      displayBoard[i][j] = 'sunk';
+  static updateReferenceBoardAfterAttack(targetBoard, displayBoard, i, j) {
+    if (targetBoard.board[i][j] === 'empty') {
+      displayBoard.board[i][j] = 'miss';
+    } else if (targetBoard.board[i][j] instanceof Ship) {
+      displayBoard.board[i][j] = 'hit';
+    } else if (targetBoard.board[i][j].isSunk() === true) {
+      displayBoard.board[i][j] = 'sunk';
     }
   }
-  renderBoard(displayBoard) {
-    const board = document.getElementById('playerBoard');
-    const boardSquares = board.querySelectorAll('.board-square');
-    boardSquares.forEach((square) => {
-      const i = square.getAttribute('data-i');
-      const j = square.getAttribute('data-j');
-      square.classList.remove('hit', 'miss', 'sunk');
-      square.classList.add(displayBoard[i][j]);
-    });
-  }
-
   static generateApp() {
     UI.generateBoards();
-    UI.initPlacementListeners();
+    Game.runGame();
   }
 
   static generateBoards() {
@@ -58,13 +48,50 @@ class UI {
       }
     }
   }
+  static renderPlayerShips(playerBoard, playerName) {
+    let board;
+    if (playerName === 'player') {
+      board = document.getElementById('playerBoard');
+      console.log('player board');
+    }
+    if (playerName === 'computer') {
+      board = document.getElementById('computerBoard');
+      console.log('computer board');
+    }
+    const boardSquares = board.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      const i = square.getAttribute('data-i');
+      const j = square.getAttribute('data-j');
+      if (playerBoard.board[i][j] instanceof Ship) {
+        square.classList.add('ship');
+      }
+    });
+  }
+  static renderBoard(referenceBoard, playerName) {
+    let board;
+    if (playerName === 'player') {
+      board = document.getElementById('playerBoard');
+      console.log('player board');
+    }
+    if (playerName === 'computer') {
+      board = document.getElementById('computerBoard');
+      console.log('computer board');
+    }
+    const boardSquares = board.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.classList.remove('hit', 'miss', 'sunk');
+      if (referenceBoard.board[i][j] !== null) {
+        square.classList.add(displayBoard.board[i][j]);
+      }
+    });
+  }
   static initPlacementListeners() {
     const playerBoard = document.getElementById('playerBoard');
     const boardSquares = playerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
-        const i = e.target.getAttribute('data-i');
-        const j = e.target.getAttribute('data-j');
+        const i = parseInt(e.target.getAttribute('data-i'));
+        const j = parseInt(e.target.getAttribute('data-j'));
         console.log(i, j);
       });
     });
@@ -80,14 +107,15 @@ class UI {
       });
     });
   }
-  static initAttackListeners() {
+  static initAttackListeners(targetBoard, referenceBoard) {
     const computerBoard = document.getElementById('computerBoard');
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
-        const i = e.target.getAttribute('data-i');
-        const j = e.target.getAttribute('data-j');
+        const i = parseInt(e.target.getAttribute('data-i'));
+        const j = parseInt(e.target.getAttribute('data-j'));
         console.log(i, j);
+        UI.updateReferenceBoardAfterAttack(targetBoard, referenceBoard, i, j);
       });
     });
   }
