@@ -116,7 +116,14 @@ class UI {
       });
     });
   }
-  static initAttackListeners(player, targetBoard, referenceBoard) {
+  static initAttackListeners(
+    player,
+    computer,
+    playerBoard,
+    computerboard,
+    computerReferenceBoard,
+    playerReferenceBoard
+  ) {
     const computerBoard = document.getElementById('computerBoard');
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
@@ -128,16 +135,35 @@ class UI {
         ) {
           return;
         }
-        UI.handleAttackClick(player, targetBoard, referenceBoard, e);
+        if (Game.isGameOver()) {
+          return;
+        }
+        UI.handleAttackClick(player, computerboard, computerReferenceBoard, e);
+        Game.checkGameOver(playerBoard, computerboard);
+        UI.renderBoard(computerReferenceBoard, 'computer');
+        if (Game.isGameOver()) {
+          UI.removeEventListenersBoardSquares();
+          alert('You won!');
+          return;
+        }
+        if (!Game.isGameOver()) {
+          UI.computerTurn(computer, playerBoard, playerReferenceBoard);
+          UI.renderBoard(playerReferenceBoard, 'player');
+        }
+        Game.checkGameOver(playerBoard, computerboard);
+        if (Game.isGameOver()) {
+          UI.removeEventListenersBoardSquares();
+          alert('You lost!');
+          return;
+        }
       });
     });
   }
-  static handleAttackClick(player, targetBoard, referenceBoard, e) {
+  static handleAttackClick(player, computerboard, referenceBoard, e) {
     const i = parseInt(e.target.getAttribute('data-i'));
     const j = parseInt(e.target.getAttribute('data-j'));
-    player.attack(targetBoard, i, j);
-    UI.updateReferenceBoardAfterAttack(targetBoard, referenceBoard, i, j);
-    UI.renderBoard(referenceBoard, 'computer');
+    player.attack(computerboard, i, j);
+    UI.updateReferenceBoardAfterAttack(computerboard, referenceBoard, i, j);
   }
   static removeEventListenersBoardSquares() {
     const boardSquares = document.querySelectorAll('.board-square');
@@ -145,6 +171,16 @@ class UI {
       let newElement = square.cloneNode(true);
       square.parentNode.replaceChild(newElement, square);
     });
+  }
+  static computerTurn(computer, playerBoard, playerReferenceBoard) {
+    const attackCoordinates = computer.selectRandomSquare();
+    computer.attack(playerBoard, attackCoordinates[0], attackCoordinates[1]);
+    UI.updateReferenceBoardAfterAttack(
+      playerBoard,
+      playerReferenceBoard,
+      attackCoordinates[0],
+      attackCoordinates[1]
+    );
   }
 }
 

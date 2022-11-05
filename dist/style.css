@@ -170,7 +170,7 @@ table {
   background-color: var(--primary-light);
 }
 
-.board-square.ship.hit {
+.board-square.hit {
   background-color: var(--primary-hit);
 }
 

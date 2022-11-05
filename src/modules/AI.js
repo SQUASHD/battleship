@@ -1,3 +1,5 @@
+import Ship from './Ship';
+
 class AI {
   constructor(name = 'Computer', currentBoardSize = 10) {
     this.name = name;
@@ -13,6 +15,9 @@ class AI {
       }
     }
     return moveList;
+  }
+  attack(board, x, y) {
+    board.receiveAttack(x, y);
   }
   selectRandomSquare() {
     if (noMoreMoves(this.moveList)) {
@@ -36,10 +41,9 @@ class AI {
   #generateFleet() {
     return [
       new Ship('Carrier', 5),
-      new Ship('Carrier', 5),
       new Ship('Battleship', 4),
       new Ship('Cruiser', 3),
-      new Ship('Submarine', 3),
+      new Ship('Cruiser', 3),
       new Ship('Destroyer', 2),
     ];
   }
