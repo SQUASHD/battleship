@@ -2,23 +2,18 @@ import Gameboard from './gameboard';
 import Ship from './Ship';
 
 class UI {
-  constructor(playerBoard, computerBoard) {
-    this.playerReferenceBoard = UI.interpretBoard(playerBoard);
-    this.computerReferenceBoard = UI.interpretBoard(computerBoard);
+  constructor() {
+    this.playerReferenceBoard = Gameboard.createBoard(10, null);
+    this.computerReferenceBoard = Gameboard.createBoard(10, null);
   }
-  static interpretBoard(boardObject) {
-    let interfaceArray = [];
-    for (let i = 0; i < boardObject.board.length; i++) {
-      interfaceArray.push([]);
-      for (let j = 0; j < boardObject.board.length; j++) {
-        if (boardObject.board[i][j] instanceof Ship) {
-          interfaceArray[i].push('ship');
-        } else {
-          interfaceArray[i].push('empty');
-        }
-      }
+  updateReferenceBoard(boardObject, displayBoard, i, j) {
+    if (boardObject[i][j] === 'empty') {
+      displayBoard[i][j] = 'miss';
+    } else if (boardObject[i][j] instanceof Ship) {
+      displayBoard[i][j] = 'hit';
+    } else if (boardObject[i][j].isSunk() === true) {
+      displayBoard[i][j] = 'sunk';
     }
-    return interfaceArray;
   }
 
   renderBoard(board) {}
