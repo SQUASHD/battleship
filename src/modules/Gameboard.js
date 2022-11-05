@@ -1,19 +1,13 @@
 import Ship from './Ship';
 
+
 class Gameboard {
   constructor(boardSize = 10) {
     this.board = Gameboard.createBoard(boardSize);
-    this.ships = [];
   }
   static createBoard(boardSize, value = 'empty') {
-    const boardArray = [];
-    for (let i = 0; i < boardSize; i++) {
-      boardArray.push([]);
-      for (let j = 0; j < boardSize; j++) {
-        boardArray[i].push(value);
-      }
-    }
-    return boardArray;
+    let board = Array(boardSize).fill(null).map(() => Array(boardSize).fill(value));
+    return board;
   }
   placeShip(ship, x, y, direction) {
     if (direction === 'horizontal') {
@@ -25,7 +19,6 @@ class Gameboard {
         this.board[x + i][y] = ship;
       }
     }
-    this.ships.push(ship);
   }
   receiveAttack(x, y) {
     if (this.board[x][y] === 'empty') {
@@ -38,6 +31,16 @@ class Gameboard {
     return this.board.every((row) =>
       row.every((space) => space === 'empty' || space === 'miss' || space.isSunk())
     );
+  }
+  resetBoard() {
+    this.board = Gameboard.createBoard(this.board.length);
+  }
+  placeRandomShips(gameboard) {
+    gameboard.placeShip(new Ship('Carrier', 5), 0, 0, 'horizontal');
+    gameboard.placeShip(new Ship('Battleship', 4), 0, 1, 'horizontal');
+    gameboard.placeShip(new Ship('Cruiser', 3), 0, 2, 'horizontal');
+    gameboard.placeShip(new Ship('Submarine', 3), 0, 3, 'horizontal');
+    gameboard.placeShip(new Ship('Destroyer', 2), 0, 4, 'horizontal');
   }
 }
 

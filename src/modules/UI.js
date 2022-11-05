@@ -16,7 +16,8 @@ class UI {
     }
   }
 
-  generateBoards() {
+  static generateBoards() {
+    const main = document.getElementById('main');
     const gameboards = document.createElement('div');
     const playerBoard = document.createElement('div');
     const computerBoard = document.createElement('div');
@@ -29,7 +30,9 @@ class UI {
 
     gameboards.appendChild(playerBoard);
     gameboards.appendChild(computerBoard);
-    document.body.appendChild(gameboards);
+    main.appendChild(gameboards);
+    console.log(main)
+    
 
     for (let i = 0; i < 10; i++) {
       const boardSquare = document.createElement('div');
