@@ -16,7 +16,32 @@ class UI {
     }
   }
 
-  renderBoard(board) {}
+  generateBoards() {
+    const gameboards = document.createElement('div');
+    const playerBoard = document.createElement('div');
+    const computerBoard = document.createElement('div');
+
+    gameboards.setAttribute('id', 'gameboards');
+    playerBoard.classList.add('board');
+    playerBoard.setAttribute('id', 'playerBoard');
+    computerBoard.classList.add('board');
+    computerBoard.setAttribute('id', 'computerBoard');
+
+    gameboards.appendChild(playerBoard);
+    gameboards.appendChild(computerBoard);
+    document.body.appendChild(gameboards);
+
+    for (let i = 0; i < 10; i++) {
+      const boardSquare = document.createElement('div');
+      boardSquare.classList.add('board-square');
+      boardSquare.setAttribute('data-i', i);
+      for (let j = 0; j < 10; j++) {
+        boardSquare.setAttribute('data-j', j);
+        playerBoard.appendChild(boardSquare.cloneNode());
+        computerBoard.appendChild(boardSquare.cloneNode());
+      }
+    }
+  }
 }
 
 export default UI;
