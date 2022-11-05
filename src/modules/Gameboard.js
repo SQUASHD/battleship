@@ -5,12 +5,12 @@ class Gameboard {
     this.board = Gameboard.createBoard(boardSize);
     this.ships = [];
   }
-  static createBoard(boardSize) {
+  static createBoard(boardSize, value = 'empty') {
     const boardArray = [];
     for (let i = 0; i < boardSize; i++) {
       boardArray.push([]);
       for (let j = 0; j < boardSize; j++) {
-        boardArray[i].push('empty');
+        boardArray[i].push(value);
       }
     }
     return boardArray;
