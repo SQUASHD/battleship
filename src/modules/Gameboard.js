@@ -37,13 +37,6 @@ class Gameboard {
   resetBoard() {
     this.board = Gameboard.createBoard(this.board.length);
   }
-  placeRandomShips(gameboard) {
-    gameboard.placeShip(new Ship('Carrier', 5), 0, 0, 'horizontal');
-    gameboard.placeShip(new Ship('Battleship', 4), 0, 1, 'horizontal');
-    gameboard.placeShip(new Ship('Cruiser', 3), 0, 2, 'horizontal');
-    gameboard.placeShip(new Ship('Submarine', 3), 0, 3, 'horizontal');
-    gameboard.placeShip(new Ship('Destroyer', 2), 0, 4, 'horizontal');
-  }
 }
 
 export default Gameboard;
