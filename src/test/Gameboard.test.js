@@ -4,14 +4,14 @@ import Ship from '../modules/Ship';
 describe('gameboard functions and attributes', () => {
   let gameboard;
   beforeEach(() => {
-    gameboard = new Gameboard(7);
+    gameboard = new Gameboard();
   });
   it('has a board', () => {
     expect(gameboard.board).toBeDefined();
   });
   it('has a board with the correct size', () => {
-    expect(gameboard.board.length).toEqual(7);
-    expect(gameboard.board[0].length).toEqual(7);
+    expect(gameboard.board.length).toEqual(10);
+    expect(gameboard.board[0].length).toEqual(10);
   });
   it('has a board with all empty spaces', () => {
     expect(gameboard.board.every(row => row.every(space => space === 'empty'))).toBe(true);
