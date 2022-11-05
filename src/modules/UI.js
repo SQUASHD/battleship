@@ -139,8 +139,8 @@ class UI {
           return;
         }
         UI.handleAttackClick(player, computerboard, computerReferenceBoard, e);
-        Game.checkGameOver(playerBoard, computerboard);
         UI.renderBoard(computerReferenceBoard, 'computer');
+        Game.checkGameOver(playerBoard, computerboard);
         if (Game.isGameOver()) {
           UI.removeEventListenersBoardSquares();
           alert('You won!');
