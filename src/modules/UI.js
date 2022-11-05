@@ -8,7 +8,9 @@ class UI {
     this.computerReferenceBoard = Gameboard.createBoard(7, null);
   }
   static generateApp() {
-    UI.init();
+    UI.generateHeader();
+    UI.generateBoards();
+    Game.runGame();
   }
   static generateHeader() {
     const main = document.getElementById('main');
@@ -126,6 +128,7 @@ class UI {
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
+        console.log(square);
         if (
           square.classList.contains('hit') ||
           square.classList.contains('miss') ||
@@ -140,8 +143,7 @@ class UI {
         UI.renderBoard(computerReferenceBoard, 'computer');
         Game.checkGameOver(playerBoard, computerboard);
         if (Game.isGameOver()) {
-          UI.removeEventListenersBoardSquares();
-          setTimeout(UI.displayResult('You Win!'), 1000);
+          UI.displayResult('You Win');
         }
         if (!Game.isGameOver()) {
           UI.computerTurn(computer, playerBoard, playerReferenceBoard);
@@ -149,8 +151,7 @@ class UI {
         }
         Game.checkGameOver(playerBoard, computerboard);
         if (Game.isGameOver()) {
-          UI.removeEventListenersBoardSquares();
-          setTimeout(UI.displayResult('You Lose!'), 1000);
+          UI.displayResult('You Lose!');
         }
       });
     });
@@ -179,17 +180,17 @@ class UI {
     );
   }
   static displayResult(result) {
+    UI.removeEventListenersBoardSquares();
     const main = document.getElementById('main');
-    const header = document.getElementById('header');
-    const resultContainer = document.createElement('div');
-    const gameboards = document.getElementById('gameboards');
     const resetBtn = document.createElement('button');
+    const resultContainer = document.createElement('div');
+
+    while (main.firstChild) {
+      main.removeChild(main.firstChild);
+    }
 
     resetBtn.textContent = 'Play Again';
     resetBtn.classList.add('reset-button');
-
-    main.removeChild(gameboards);
-    header.style.display = 'none';
 
     resultContainer.classList.add('result-container');
     resultContainer.textContent = result;
@@ -197,17 +198,12 @@ class UI {
     main.appendChild(resultContainer);
 
     resetBtn.addEventListener('click', () => {
-      UI.removeMainChildren();
-      UI.init();
+      UI.removeResults();
+      UI.generateApp();
     });
   }
-  static init() {
-    UI.generateHeader();
-    UI.generateBoards();
-    Game.runGame();
-  }
 
-  static removeMainChildren() {
+  static removeResults() {
     const main = document.getElementById('main');
     while (main.firstChild) {
       main.removeChild(main.firstChild);

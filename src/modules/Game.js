@@ -21,6 +21,7 @@ class Game {
     return this.standardBoardSize;
   }
   static runGame() {
+    Game.gameOver = false;
     const userInterface = new UI();
     const p1 = new Player();
     const p2 = new AI();
