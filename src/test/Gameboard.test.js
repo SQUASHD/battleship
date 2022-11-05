@@ -89,4 +89,12 @@ describe('gameboard functions and attributes during play', () => {
     gameboard.receiveAttack(0, 2);
     expect(gameboard.allShipsSunk()).toBe(false);
   });
+  it('can place a random ship on an empty board', () => {
+    gameboard.placeShipsRandomly([new Ship('Battleship', 4)]);
+    expect(gameboard.board.some(row => row.some(space => space !== 'empty'))).toBe(true);
+  });
+  it('can place multiple ships on an empty board', () => {
+    gameboard.placeShipsRandomly([new Ship('Battleship', 4), new Ship('Destroyer', 3)]);
+    expect(gameboard.board.some(row => row.some(space => space !== 'empty'))).toBe(true);
+  });
 });

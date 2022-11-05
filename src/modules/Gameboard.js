@@ -23,6 +23,41 @@ class Gameboard {
     }
     this.ships.push(ship);
   }
+  placeShipsRandomly(shipFleet) {
+    shipFleet.forEach((ship) => {
+      let x = Math.floor(Math.random() * this.board.length);
+      let y = Math.floor(Math.random() * this.board.length);
+      let direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+      while (!this.canPlaceShip(ship, x, y, direction)) {
+        x = Math.floor(Math.random() * this.board.length);
+        y = Math.floor(Math.random() * this.board.length);
+        direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+      }
+      this.placeShip(ship, x, y, direction);
+    });
+  }
+  canPlaceShip(ship, x, y, direction) {
+    if (direction === 'horizontal') {
+      if (y + ship.length > this.board.length) {
+        return false;
+      }
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[x][y + i] !== 'empty') {
+          return false;
+        }
+      }
+    } else {
+      if (x + ship.length > this.board.length) {
+        return false;
+      }
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[x + i][y] !== 'empty') {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
   receiveAttack(x, y) {
     if (this.board[x][y] instanceof Ship) {
       this.board[x][y].hit();
