@@ -1,10 +1,11 @@
 import Ship from './Ship';
+import shipfleet from './shipFleet';
 
 class AI {
-  constructor(name = 'Computer', currentBoardSize = 10) {
+  constructor(name = 'Computer', currentBoardSize = 7) {
     this.name = name;
     this.moveList = AI.generateMoveList(currentBoardSize);
-    this.shipFleet = this.#generateFleet();
+    this.shipFleet = shipfleet();
   }
   static generateMoveList(boardSize) {
     const moveList = [];
@@ -37,15 +38,6 @@ class AI {
     function noMoreMoves(moveList) {
       return moveList.every((row) => row.every((space) => space !== 'none'));
     }
-  }
-  #generateFleet() {
-    return [
-      new Ship('Carrier', 5),
-      new Ship('Battleship', 4),
-      new Ship('Cruiser', 3),
-      new Ship('Cruiser', 3),
-      new Ship('Destroyer', 2),
-    ];
   }
 }
 

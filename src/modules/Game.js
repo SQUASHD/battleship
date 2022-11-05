@@ -7,6 +7,7 @@ import UI from './UI';
 class Game {
   constructor() {
     this.gameOver = false;
+    this.standardBoardSize = 7;
   }
   static isGameOver() {
     return this.gameOver;
@@ -15,6 +16,9 @@ class Game {
     if (playerBoard.allShipsSunk() || computerBoard.allShipsSunk()) {
       this.gameOver = true;
     }
+  }
+  static getBoardSize() {
+    return this.standardBoardSize;
   }
   static runGame() {
     const userInterface = new UI();

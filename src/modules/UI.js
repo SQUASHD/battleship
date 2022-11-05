@@ -4,8 +4,8 @@ import Game from './Game';
 
 class UI {
   constructor() {
-    this.playerReferenceBoard = Gameboard.createBoard(10, null);
-    this.computerReferenceBoard = Gameboard.createBoard(10, null);
+    this.playerReferenceBoard = Gameboard.createBoard(7, null);
+    this.computerReferenceBoard = Gameboard.createBoard(7, null);
   }
   static generateApp() {
     UI.generateBoards();
@@ -27,11 +27,11 @@ class UI {
     gameboards.appendChild(computerBoard);
     main.appendChild(gameboards);
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 7; i++) {
       const boardSquare = document.createElement('div');
       boardSquare.classList.add('board-square');
       boardSquare.setAttribute('data-i', i);
-      for (let j = 0; j < 10; j++) {
+      for (let j = 0; j < 7; j++) {
         boardSquare.setAttribute('data-j', j);
         playerBoard.appendChild(boardSquare.cloneNode());
         computerBoard.appendChild(boardSquare.cloneNode());
@@ -55,8 +55,8 @@ class UI {
     } else if (targetBoard.board[i][j] instanceof Ship) {
       displayBoard[i][j] = 'hit';
     }
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < 7; j++) {
         if (targetBoard.board[i][j] instanceof Ship) {
           if (targetBoard.board[i][j].isSunk()) {
             displayBoard[i][j] = 'sunk';
@@ -102,6 +102,9 @@ class UI {
       square.classList.remove('hit', 'miss', 'sunk');
       if (referenceBoard[i][j] !== null) {
         square.classList.add(referenceBoard[i][j]);
+      }
+      if (square.classList.contains('miss')) {
+        square.textContent = 'X';
       }
     });
   }

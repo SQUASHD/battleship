@@ -1,22 +1,12 @@
-import Ship from './Ship';
+import shipfleet from './shipFleet';
 
 class Player {
   constructor(name = 'Player') {
     this.name = name;
-    this.shipFleet = Player.#generateFleet();
+    this.shipFleet = shipfleet();
   }
   attack(board, x, y) {
     board.receiveAttack(x, y);
-  }
-
-  static #generateFleet() {
-    return [
-      new Ship('Carrier', 5),
-      new Ship('Battleship', 4),
-      new Ship('Cruiser', 3),
-      new Ship('Cruiser', 3),
-      new Ship('Destroyer', 2),
-    ];
   }
 }
 
