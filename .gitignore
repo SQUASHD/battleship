@@ -1,4 +1,4 @@
 .eslintrc.json
 .prettierrc
-babel.config.js
+.babelrc
 node_modules
