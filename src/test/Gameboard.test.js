@@ -66,10 +66,6 @@ describe('gameboard functions and attributes during play', () => {
     gameboard.receiveAttack(0, 2);
     expect(gameboard.board[0][0].hits).toBe(3);
   });
-  it('can register a miss', () => {
-    gameboard.receiveAttack(0, 0);
-    expect(gameboard.board[0][0]).toEqual('miss');
-  });
   it('can tell if all ships sunk trivial case', () => {
     expect(gameboard.allShipsSunk()).toBe(true);
   });
