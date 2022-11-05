@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "mode": "development",
-  "devtool": "inline-source-map",
   "scripts": {
     "test": "Jest"
   },
