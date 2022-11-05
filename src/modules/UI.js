@@ -15,6 +15,20 @@ class UI {
       displayBoard[i][j] = 'sunk';
     }
   }
+  renderBoard(displayBoard) {
+    const board = document.getElementById('playerBoard');
+    const boardSquares = board.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      const i = square.getAttribute('data-i');
+      const j = square.getAttribute('data-j');
+      square.classList.remove('hit', 'miss', 'sunk');
+      square.classList.add(displayBoard[i][j]);
+    });
+  }
+
+  static generateApp() {
+    UI.generateBoards();
+  }
 
   static generateBoards() {
     const main = document.getElementById('main');
@@ -31,8 +45,6 @@ class UI {
     gameboards.appendChild(playerBoard);
     gameboards.appendChild(computerBoard);
     main.appendChild(gameboards);
-    console.log(main)
-    
 
     for (let i = 0; i < 10; i++) {
       const boardSquare = document.createElement('div');
@@ -44,6 +56,39 @@ class UI {
         computerBoard.appendChild(boardSquare.cloneNode());
       }
     }
+  }
+  initPlacementListeners() {
+    const playerBoard = document.getElementById('playerBoard');
+    const boardSquares = playerBoard.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.addEventListener('click', (e) => {
+        const i = e.target.getAttribute('data-i');
+        const j = e.target.getAttribute('data-j');
+        console.log(i, j);
+      });
+    });
+  }
+  removePlacementListeners() {
+    const playerBoard = document.getElementById('playerBoard');
+    const boardSquares = playerBoard.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.removeEventListener('click', (e) => {
+        const i = e.target.getAttribute('data-i');
+        const j = e.target.getAttribute('data-j');
+        console.log(i, j);
+      });
+    });
+  }
+  initAttackListeners() {
+    const computerBoard = document.getElementById('computerBoard');
+    const boardSquares = computerBoard.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.addEventListener('click', (e) => {
+        const i = e.target.getAttribute('data-i');
+        const j = e.target.getAttribute('data-j');
+        console.log(i, j);
+      });
+    });
   }
 }
 
