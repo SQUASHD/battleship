@@ -20,11 +20,16 @@ class Game {
     const p2 = new AI();
     const p1Board = new Gameboard();
     const p2Board = new Gameboard();
-    Game.placePlayerShips();
-    Game.placeComputerShips();
+    
+    // Place ships
+    // UI.initEventListeners();
     while (!this.#gameOver) {
-      // player turn
-      // computer turn
+      // player/computer turn
+      // attack
+      // receive attack
+      // update gameboard
+      // update UI
+      // check if game is over
     }
   }
 }
