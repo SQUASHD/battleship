@@ -1,5 +1,5 @@
 class AI {
-  constructor(name = 'Computer', currentBoardSize = 7) {
+  constructor(name = 'Computer', currentBoardSize = 10) {
     this.name = name;
     this.moveList = AI.generateMoveList(currentBoardSize);
   }

@@ -16,15 +16,7 @@ describe('AI functions and attributes', () => {
     expect(computer.moveList).toBeDefined();
   });
   it('has a moveList with only "none" at start', () => {
-    expect(computer.moveList).toEqual([
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-      ['none', 'none', 'none', 'none', 'none', 'none', 'none'],
-    ]);
+    expect(computer.moveList.every(row => row.every(space => space === 'none'))).toBe(true);
   });
   it('can select a random square', () => {
     expect(computer.selectRandomSquare()).toBeDefined();
