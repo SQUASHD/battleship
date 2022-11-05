@@ -65,19 +65,24 @@ class UI {
       }
     }
   }
-  static renderPlayerShips(playerBoard, playerName) {
-    let board;
-    if (playerName === 'player') {
-      board = document.getElementById('playerBoard');
-    }
-    if (playerName === 'computer') {
-      board = document.getElementById('computerBoard');
-    }
+  static renderPlayerShips(playerBoard) {
+    const board = document.getElementById('playerBoard');
     const boardSquares = board.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       const i = square.getAttribute('data-i');
       const j = square.getAttribute('data-j');
       if (playerBoard.board[i][j] instanceof Ship) {
+        square.classList.add('ship');
+      }
+    });
+  }
+  static renderComputerships(computerBoard) {
+    const board = document.getElementById('computerBoard');
+    const boardSquares = board.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      const i = square.getAttribute('data-i');
+      const j = square.getAttribute('data-j');
+      if (computerBoard.board[i][j] instanceof Ship) {
         square.classList.add('ship');
       }
     });
@@ -116,7 +121,11 @@ class UI {
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
-        if (square.classList.contains('hit') || square.classList.contains('miss') || square.classList.contains('sunk')) {
+        if (
+          square.classList.contains('hit') ||
+          square.classList.contains('miss') ||
+          square.classList.contains('sunk')
+        ) {
           return;
         }
         UI.handleAttackClick(player, targetBoard, referenceBoard, e);
@@ -130,14 +139,11 @@ class UI {
     UI.updateReferenceBoardAfterAttack(targetBoard, referenceBoard, i, j);
     UI.renderBoard(referenceBoard, 'computer');
   }
-  static removeAttackListeners() {
-    const computerBoard = document.getElementById('computerBoard');
-    const boardSquares = computerBoard.querySelectorAll('.board-square');
+  static removeEventListenersBoardSquares() {
+    const boardSquares = document.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
-      square.removeEventListener('click', (e) => {
-        const i = parseInt(e.target.getAttribute('data-i'));
-        const j = parseInt(e.target.getAttribute('data-j'));
-      });
+      let newElement = square.cloneNode(true);
+      square.parentNode.replaceChild(newElement, square);
     });
   }
 }
