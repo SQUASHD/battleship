@@ -34,8 +34,8 @@ class Game {
     p2Board.placeShip(new Ship('Destroyer', 2), 6, 5, 'vertical');
     UI.renderPlayerShips(p1Board, 'player');
     UI.renderPlayerShips(p2Board, 'computer')
-    UI.initAttackListeners(p2Board, userInterface.computerReferenceBoard);
-    // UI.renderBoard(userInterface.playerReferenceBoard);
+    UI.initAttackListeners(p1, p2Board, userInterface.computerReferenceBoard);
+    UI.renderBoard(userInterface.computerReferenceBoard, 'computer');
     // while (!this.#gameOver) {
     // player/computer turn
     // attack -> receive attack

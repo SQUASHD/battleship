@@ -7,20 +7,10 @@ class UI {
     this.playerReferenceBoard = Gameboard.createBoard(10, null);
     this.computerReferenceBoard = Gameboard.createBoard(10, null);
   }
-  static updateReferenceBoardAfterAttack(targetBoard, displayBoard, i, j) {
-    if (targetBoard.board[i][j] === 'empty') {
-      displayBoard.board[i][j] = 'miss';
-    } else if (targetBoard.board[i][j] instanceof Ship) {
-      displayBoard.board[i][j] = 'hit';
-    } else if (targetBoard.board[i][j].isSunk() === true) {
-      displayBoard.board[i][j] = 'sunk';
-    }
-  }
   static generateApp() {
     UI.generateBoards();
     Game.runGame();
   }
-
   static generateBoards() {
     const main = document.getElementById('main');
     const gameboards = document.createElement('div');
@@ -48,15 +38,40 @@ class UI {
       }
     }
   }
+  static initPlacementListeners() {
+    const playerBoard = document.getElementById('playerBoard');
+    const boardSquares = playerBoard.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.addEventListener('click', (e) => {
+        const i = parseInt(e.target.getAttribute('data-i'));
+        const j = parseInt(e.target.getAttribute('data-j'));
+        console.log(i, j);
+      });
+    });
+  }
+  static updateReferenceBoardAfterAttack(targetBoard, displayBoard, i, j) {
+    if (targetBoard.board[i][j] === 'empty') {
+      displayBoard[i][j] = 'miss';
+    } else if (targetBoard.board[i][j] instanceof Ship) {
+      displayBoard[i][j] = 'hit';
+    }
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        if (targetBoard.board[i][j] instanceof Ship) {
+          if (targetBoard.board[i][j].isSunk()) {
+            displayBoard[i][j] = 'sunk';
+          }
+        }
+      }
+    }
+  }
   static renderPlayerShips(playerBoard, playerName) {
     let board;
     if (playerName === 'player') {
       board = document.getElementById('playerBoard');
-      console.log('player board');
     }
     if (playerName === 'computer') {
       board = document.getElementById('computerBoard');
-      console.log('computer board');
     }
     const boardSquares = board.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
@@ -71,29 +86,18 @@ class UI {
     let board;
     if (playerName === 'player') {
       board = document.getElementById('playerBoard');
-      console.log('player board');
     }
     if (playerName === 'computer') {
       board = document.getElementById('computerBoard');
-      console.log('computer board');
     }
     const boardSquares = board.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
+      const i = square.getAttribute('data-i');
+      const j = square.getAttribute('data-j');
       square.classList.remove('hit', 'miss', 'sunk');
-      if (referenceBoard.board[i][j] !== null) {
-        square.classList.add(displayBoard.board[i][j]);
+      if (referenceBoard[i][j] !== null) {
+        square.classList.add(referenceBoard[i][j]);
       }
-    });
-  }
-  static initPlacementListeners() {
-    const playerBoard = document.getElementById('playerBoard');
-    const boardSquares = playerBoard.querySelectorAll('.board-square');
-    boardSquares.forEach((square) => {
-      square.addEventListener('click', (e) => {
-        const i = parseInt(e.target.getAttribute('data-i'));
-        const j = parseInt(e.target.getAttribute('data-j'));
-        console.log(i, j);
-      });
     });
   }
   static removePlacementListeners() {
@@ -107,15 +111,32 @@ class UI {
       });
     });
   }
-  static initAttackListeners(targetBoard, referenceBoard) {
+  static initAttackListeners(player, targetBoard, referenceBoard) {
     const computerBoard = document.getElementById('computerBoard');
     const boardSquares = computerBoard.querySelectorAll('.board-square');
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
+        if (square.classList.contains('hit') || square.classList.contains('miss') || square.classList.contains('sunk')) {
+          return;
+        }
+        UI.handleAttackClick(player, targetBoard, referenceBoard, e);
+      });
+    });
+  }
+  static handleAttackClick(player, targetBoard, referenceBoard, e) {
+    const i = parseInt(e.target.getAttribute('data-i'));
+    const j = parseInt(e.target.getAttribute('data-j'));
+    player.attack(targetBoard, i, j);
+    UI.updateReferenceBoardAfterAttack(targetBoard, referenceBoard, i, j);
+    UI.renderBoard(referenceBoard, 'computer');
+  }
+  static removeAttackListeners() {
+    const computerBoard = document.getElementById('computerBoard');
+    const boardSquares = computerBoard.querySelectorAll('.board-square');
+    boardSquares.forEach((square) => {
+      square.removeEventListener('click', (e) => {
         const i = parseInt(e.target.getAttribute('data-i'));
         const j = parseInt(e.target.getAttribute('data-j'));
-        console.log(i, j);
-        UI.updateReferenceBoardAfterAttack(targetBoard, referenceBoard, i, j);
       });
     });
   }
