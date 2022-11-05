@@ -3,6 +3,7 @@ import Ship from "./Ship";
 class Gameboard {
   constructor(boardSize = 7) {
     this.board = Gameboard.createBoard(boardSize);
+    this.ships = [];
   }
   static createBoard(boardSize) {
     const boardArray = [];
@@ -24,6 +25,7 @@ class Gameboard {
         this.board[x + i][y] = ship;
       }
     }
+    this.ships.push(ship);
   }
   receiveAttack(x, y) {
     if (this.board[x][y] === 'empty') {
