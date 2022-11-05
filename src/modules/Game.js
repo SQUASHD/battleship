@@ -29,6 +29,7 @@ class Game {
     p1Board.placeShipsRandomly(p1.shipFleet);
     p2Board.placeShipsRandomly(p2.shipFleet);
     UI.renderPlayerShips(p1Board);
+    // UI.renderComputerships(p2Board);
     UI.initAttackListeners(
       p1,
       p2,
