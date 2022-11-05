@@ -4,7 +4,7 @@ import Ship from '../modules/Ship';
 describe('gameboard functions and attributes', () => {
   let gameboard;
   beforeEach(() => {
-    gameboard = new Gameboard();
+    gameboard = new Gameboard(10);
   });
   it('has a board', () => {
     expect(gameboard.board).toBeDefined();
