@@ -15,26 +15,33 @@ class Game {
   playerTurn() {}
   computerTurn() {}
 
-  runGame() {
+  static runGame() {
+    const userInterface = new UI();
     const p1 = new Player();
     const p2 = new AI();
     const p1Board = new Gameboard();
     const p2Board = new Gameboard();
-
-    // while (!p1board.#shipsPlaced)
-      // UI.initPlacementListeners(p1Board);
-      // p1Board.placeShips() || p1Board.placeRandomShips();
-      // ready click -> p1Board.shipsPlace = true;
-      // UI.removePlacementListeners();
-      // p2Board.placeRandomShips();
-      // UI.initGameListeners(p1Board);
-    while (!this.#gameOver) {
-      // player/computer turn
-      // attack -> receive attack
-      // update gameboard
-      // update UI
-      // check if game is over
-    }
+    UI.initPlacementListeners();
+    // place player ships
+    p1Board.placeShip(new Ship('Battleship', 4), 0, 0, 'horizontal');
+    p1Board.placeShip(new Ship('Cruiser', 3), 1, 0, 'horizontal');
+    p1Board.placeShip(new Ship('Submarine', 3), 2, 0, 'horizontal');
+    p1Board.placeShip(new Ship('Destroyer', 2), 3, 0, 'horizontal');
+    // UI.removePlacementListeners();
+    p2Board.placeShip(new Ship('Battleship', 4), 0, 0, 'horizontal');
+    p2Board.placeShip(new Ship('Cruiser', 3), 2, 0, 'horizontal');
+    p2Board.placeShip(new Ship('Submarine', 3), 4, 3, 'horizontal');
+    p2Board.placeShip(new Ship('Destroyer', 2), 6, 5, 'vertical');
+    UI.renderPlayerShips(p1Board, 'player');
+    UI.renderPlayerShips(p2Board, 'computer')
+    UI.initAttackListeners(p2Board, userInterface.computerReferenceBoard);
+    // UI.renderBoard(userInterface.playerReferenceBoard);
+    // while (!this.#gameOver) {
+    // player/computer turn
+    // attack -> receive attack
+    // update gameboard
+    // update UI
+    // check if game is over
   }
 }
 
