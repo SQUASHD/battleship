@@ -1,6 +1,12 @@
 :root {
-  --color-primary: #000;
-  --color-secondary: #fff;
+  --primary-dark: hsl(220, 20%, 15%);
+  --primary-dark-lighter: hsl(220, 20%, 20%);
+  --primary-light: hsl(220, 20%, 95%);
+  --primary-light-darker: hsl(220, 20%, 90%);
+
+  --primary-hit: hsl(133, 100%, 50%);
+  --primary-miss: hsl(0, 100%, 50%);
+  --primary-sunk: hsl(220, 100%, 50%);
 }
 
 html,
@@ -128,18 +134,54 @@ table {
   border-spacing: 0;
 }
 
-#gameboards
-{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  flex-wrap: wrap;
+#main {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-dark);
 }
 
-.gameboard {
-  display:grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(7, 1fr);
+#gameboards {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 5vh);
+  grid-template-rows: repeat(10, 5vh);
+  border: solid 1px var(--primary-light);
+}
+
+.board-square {
+  border: solid 1px var(--primary-light);
+  display: flex;
+}
+
+.board-square:hover {
+  background-color: var(--primary-dark-lighter);
+}
+
+.board-square.ship {
+  background-color: var(--primary-light);
+}
+
+.board-square.hit {
+  background-color: var(--primary-hit);
+}
+
+.board-square.miss {
+  background-color: var(--primary-miss);
+}
+
+.board-square.sunk {
+  background-color: var(--primary-sunk);
+}
+
+.board-square .hit {
+  background-color: var(--primary-light-darker);
 }
