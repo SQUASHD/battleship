@@ -11,7 +11,7 @@ describe('Ship functions and attributes', () => {
   it('has a length', () => {
     expect(ship.length).toEqual(4);
   });
-  it('has 0 hits', () => {
+  it('has 0 hits at start', () => {
     expect(ship.hits).toEqual(0);
   });
   it('can be hit', () => {
@@ -23,6 +23,12 @@ describe('Ship functions and attributes', () => {
     ship.hit();
     ship.hit();
     ship.hit();
-    expect(ship.isSunk()).toEqual(true);
+    expect(ship.isSunk()).toBe(true);
+  });
+  it('is not sunk after hits less than length', () => {
+    ship.hit();
+    ship.hit();
+    ship.hit();
+    expect(ship.isSunk()).toBe(false);
   });
 });

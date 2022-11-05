@@ -14,8 +14,14 @@ describe('gameboard functions and attributes', () => {
     expect(gameboard.board[0].length).toEqual(7);
   });
   it('has a board with all empty spaces', () => {
-    expect(gameboard.board[0][0]).toEqual('empty');
-    expect(gameboard.board[6][6]).toEqual('empty');
+    expect(gameboard.board.every(row => row.every(space => space === 'empty'))).toBe(true);
+  });
+});
+
+describe('gameboard functions and attributes during play', () => {
+  let gameboard;
+  beforeEach(() => {
+    gameboard = new Gameboard(7);
   });
   it('can place a ship', () => {
     const ship = new Ship('Battleship', 4);
@@ -24,6 +30,13 @@ describe('gameboard functions and attributes', () => {
     expect(gameboard.board[0][1]).toEqual(ship);
     expect(gameboard.board[0][2]).toEqual(ship);
     expect(gameboard.board[0][3]).toEqual(ship);
+  });
+  it('references same ship in multiple spaces', () => {
+    const ship = new Ship('Battleship', 4);
+    gameboard.placeShip(ship, 0, 0, 'horizontal');
+    expect(gameboard.board[0][0]).toEqual(gameboard.board[0][1]);
+    expect(gameboard.board[0][1]).toEqual(gameboard.board[0][2]);
+    expect(gameboard.board[0][2]).toEqual(gameboard.board[0][3]);
   });
   it('can place a ship vertically', () => {
     const ship = new Ship('Battleship', 4);
@@ -59,6 +72,9 @@ describe('gameboard functions and attributes', () => {
   });
   it('can tell if all ships sunk trivial case', () => {
     expect(gameboard.allShipsSunk()).toBe(true);
+  });
+  it('can tell if all ships not sunk trivial case', () => {
+    expect(gameboard.allShipsSunk()).not.toBe(false);
   });
   it('can tell if all ships are sunk after ship placement', () => {
     const ship = new Ship('Battleship', 4);
