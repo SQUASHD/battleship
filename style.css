@@ -6,6 +6,10 @@
 
   --primary-sunk: hsl(133, 40%, 50%);
   --primary-hit: hsl(0, 30%, 50%);
+  --primary-ship-overlap-invalid: hsl(0, 30%, 30%);
+
+  --grid-size-desktop: clamp(30px, 9vh , 7vw);
+  --board-header-fontsize-clamp: clamp(1.5rem, 3vw, 2rem);
 }
 
 @font-face {
@@ -119,6 +123,7 @@ section {
   display: block;
 }
 body {
+  cursor: default;
   line-height: 1;
 }
 ol,
@@ -150,41 +155,53 @@ body {
   background-color: var(--primary-dark);
   width: 100vw;
   height: 100vh;
-  padding-top: 24px;
 
   display: grid;
-  grid-template-columns: 100vw;
-  grid-template-rows: 100px 1fr;
+  grid-template-columns: 50vw 50vw;
+  grid-template-rows: 150px calc(100vh - 150px);
 }
 
 #header,
 .result-container {
   font-weight: 900;
   font-family: 'Bebas Neue', cursive;
-  color: white;
+  color: var(--primary-light);
   text-shadow: 1px 1px 0 var(--primary-dark), 2px 2px 0px var(--primary-light);
+  font-size: 6rem;
 }
 
-#header {
+#header-container {
   grid-row: 1 / 2;
+  grid-column: 1 / 3;
 
-  font-size: 6rem;
+  padding-top: 24px;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-#gameboards {
-  grid-row: 2 / 3;
+#subheader {
+  font-family: 'Bebas Neue', cursive;
+  color: var(--primary-light);
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+#playerBoardUIContainer {
+  grid-column: 1 / 3;
+}
+
+.boardUIContainer {
   width: 100%;
   height: 100%;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
-  gap: 60px;
+  gap: 30px;
 }
 
 .result-container {
@@ -201,22 +218,37 @@ button.reset-button {
   appearance: none;
   background-color: transparent;
   border: 2px solid var(--primary-light);
-  font-size: 4rem;
+  font-size: 2rem;
   color: var(--primary-light);
   font-family: 'Bebas Neue', cursive;
-  padding: 10px 24px;
+  padding: 10px;
   border-radius: 15px;
 }
 
-button.reset-button:hover {
+button.reset-button:hover,
+div[data-direction]:hover {
   cursor: pointer;
   background-color: var(--primary-dark-lighter);
 }
 
+#playerHeader {
+  cursor: pointer;
+}
+.board-header {
+  cursor: default;
+  color: var(--primary-light);
+  font-size: var(--board-header-fontsize-clamp);
+  font-family: 'Bebas Neue', cursive;
+  border: 2px solid var(--primary-light);
+  border-radius: 0.4rem;
+  padding: 0.6rem;
+  text-align: center;
+}
+
 .board {
   display: grid;
-  grid-template-columns: repeat(7, clamp(4vw, 8vw, 9vh));
-  grid-template-rows: repeat(7, clamp(4vw, 8vw, 9vh));
+  grid-template-columns: repeat(7, var(--grid-size-desktop));
+  grid-template-rows: repeat(7, var(--grid-size-desktop));
   border: solid 1px var(--primary-light);
 }
 
@@ -229,8 +261,24 @@ button.reset-button:hover {
   color: var(--primary-dark);
 }
 
-.board-square:hover {
+#computerBoard .board-square:hover:not(.hit):not(.miss):not(.sunk):not(.game-over):not(.ship) {
   background-color: var(--primary-dark-lighter);
+}
+
+#playerBoard.board-square.ship {
+  background-color: var(--primary-light);
+}
+
+#playerBoard .board-square.valid-hover {
+  background-color: var(--primary-sunk)
+}
+
+#playerBoard .board-square.invalid-hover {
+  background-color: var(--primary-hit)
+}
+
+#playerBoard .board-square.ship.invalid-hover {
+  background-color: var(--primary-ship-overlap-invalid);
 }
 
 .board-square.ship {
