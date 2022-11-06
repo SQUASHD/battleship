@@ -37,17 +37,14 @@ class Game {
     const p2 = new AI();
     const p1Board = new Gameboard();
     const p2Board = new Gameboard();
-    p1Board.placeShipsRandomly(p1.shipFleet);
-    p2Board.placeShipsRandomly(p2.shipFleet);
-    UI.renderPlayerShips(p1Board);
-    UI.initAttackListeners(
-      p1,
+    UI.initPlacementListeners(p1,
       p2,
       p1Board,
       p2Board,
       userInterface.computerReferenceBoard,
-      userInterface.playerReferenceBoard
-    );
+      userInterface.playerReferenceBoard);
+    // p1Board.placeShipsRandomly(p1.shipFleet, p1Board.board);
+    p2Board.placeShipsRandomly(p2.shipFleet, p2Board.board);
   }
 }
 

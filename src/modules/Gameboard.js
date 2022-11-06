@@ -11,7 +11,7 @@ class Gameboard {
       .map(() => Array(boardSize).fill(value));
     return board;
   }
-  placeShip(ship, x, y, direction) {
+  placeShip(ship, x, y, direction, player = null) {
     if (direction === 'horizontal') {
       for (let i = 0; i < ship.length; i++) {
         this.board[x][y + i] = ship;
@@ -22,36 +22,39 @@ class Gameboard {
       }
     }
     this.ships.push(ship);
+    if (player) {
+      player.shipFleet.shift();
+    }
   }
-  placeShipsRandomly(shipFleet) {
+  placeShipsRandomly(shipFleet, gameboard) {
     shipFleet.forEach((ship) => {
-      let x = Math.floor(Math.random() * this.board.length);
-      let y = Math.floor(Math.random() * this.board.length);
+      let x = Math.floor(Math.random() * gameboard.length);
+      let y = Math.floor(Math.random() * gameboard.length);
       let direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-      while (!this.canPlaceShip(ship, x, y, direction)) {
-        x = Math.floor(Math.random() * this.board.length);
-        y = Math.floor(Math.random() * this.board.length);
+      while (!Gameboard.canPlaceShip(ship, x, y, direction, gameboard)) {
+        x = Math.floor(Math.random() * gameboard.length);
+        y = Math.floor(Math.random() * gameboard.length);
         direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
       }
       this.placeShip(ship, x, y, direction);
     });
   }
-  canPlaceShip(ship, x, y, direction) {
+  static canPlaceShip(ship, x, y, direction, gameboard) {
     if (direction === 'horizontal') {
-      if (y + ship.length > this.board.length) {
+      if (y + ship.length > gameboard.length) {
         return false;
       }
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[x][y + i] !== 'empty') {
+        if (gameboard[x][y + i] !== 'empty') {
           return false;
         }
       }
     } else {
-      if (x + ship.length > this.board.length) {
+      if (x + ship.length > gameboard.length) {
         return false;
       }
       for (let i = 0; i < ship.length; i++) {
-        if (this.board[x + i][y] !== 'empty') {
+        if (gameboard[x + i][y] !== 'empty') {
           return false;
         }
       }
@@ -69,7 +72,7 @@ class Gameboard {
     );
   }
   static resetBoard() {
-    this.board = Gameboard.createBoard(this.board.length);
+    this.board = Gameboard.createBoard(gameboard.length);
   }
 }
 
