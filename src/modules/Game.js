@@ -1,5 +1,4 @@
 import Gameboard from './gameboard';
-import Ship from './Ship';
 import Player from './Player';
 import AI from './AI';
 import UI from './UI';
@@ -37,14 +36,14 @@ class Game {
     const p2 = new AI();
     const p1Board = new Gameboard();
     const p2Board = new Gameboard();
-    UI.initPlacementListeners(p1,
+    UI.initPlacementListeners(
+      p1,
       p2,
       p1Board,
       p2Board,
       userInterface.computerReferenceBoard,
-      userInterface.playerReferenceBoard);
-    // p1Board.placeShipsRandomly(p1.shipFleet, p1Board.board);
-    p2Board.placeShipsRandomly(p2.shipFleet, p2Board.board);
+      userInterface.playerReferenceBoard
+    );
   }
 }
 
