@@ -99,6 +99,7 @@ class UI {
 
     directionToggle.addEventListener('click', (e) => {
       changeToggleButton();
+      UI.updateShipPlacementIndicators(e, requiredLengthOfShip)
     });
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
@@ -113,12 +114,13 @@ class UI {
 
         if (square.classList.contains('valid-hover')) {
           playerboard.placeShip(player.shipFleet[0], i, j, direction, player);
-          UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
           UI.renderPlayerShips(playerboard);
+          UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
 
           if (player.shipFleet[0] !== undefined) {
             requiredLengthOfShip = player.shipFleet[0].length;
           } else {
+            UI.renderPlayerShips(playerboard);
             UI.toggleComputerBoardVisibility();
             UI.updateHeaders();
             UI.removeBoardSquareEventListeners();
@@ -151,6 +153,9 @@ class UI {
     });
 
     function changeToggleButton() {
+      if (player.shipFleet[0] === undefined) {
+        return
+      }
       const directionToggle = document.getElementById('playerHeader');
       if (directionToggle.getAttribute('data-direction') === 'horizontal') {
         directionToggle.setAttribute('data-direction', 'vertical');
@@ -344,6 +349,8 @@ class UI {
     let newElement = toggleButton.cloneNode(true);
     newElement.style.cursor = 'default';
     toggleButton.parentNode.replaceChild(newElement, toggleButton);
+    document.removeEventListener('contextmenu', UI.changeToggleButton());
+    document.removeEventListener('contextmenu', UI.updateShipPlacementIndicators(e, requiredLengthOfShip));
   }
   static toggleComputerBoardVisibility() {
     const computerBoard = document.getElementById('computerBoardUIContainer');
