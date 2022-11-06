@@ -99,7 +99,7 @@ class UI {
 
     directionToggle.addEventListener('click', (e) => {
       changeToggleButton();
-      UI.updateShipPlacementIndicators(e, requiredLengthOfShip)
+      UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
     });
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
@@ -138,10 +138,6 @@ class UI {
         }
       });
       square.addEventListener('mouseenter', (e) => {
-        boardSquares.forEach((square) => {
-          square.classList.remove('valid-hover');
-          square.classList.remove('invalid-hover');
-        });
         UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
       });
       square.addEventListener('mouseleave', () => {
@@ -151,10 +147,9 @@ class UI {
         });
       });
     });
-
     function changeToggleButton() {
       if (player.shipFleet[0] === undefined) {
-        return
+        return;
       }
       const directionToggle = document.getElementById('playerHeader');
       if (directionToggle.getAttribute('data-direction') === 'horizontal') {
@@ -176,56 +171,69 @@ class UI {
 
     const i = parseInt(e.target.getAttribute('data-i'));
     const j = parseInt(e.target.getAttribute('data-j'));
+    console.log(i, j);
 
     boardSquares.forEach((square) => {
       square.classList.remove('valid-hover');
       square.classList.remove('invalid-hover');
     });
-
     if (direction === 'horizontal') {
-      // if j + requiredLengthOfShip - 1 > 6 then squares to the right on i are invalid
-      // squares from j to j + requiredLengthOfShip - 1 within j < 7 are invalid
-      if (j + requiredLengthOfShip - 1 > 6) {
-        for (let k = j; k < 7; k++) {
-          boardSquares[i * 7 + k].classList.add('invalid-hover');
+      // if j + requiredLengthOfShip > 7, then the squares on the right on the same row are invalid
+      if (j + requiredLengthOfShip > 7) {
+        for (let k = 0; k < requiredLengthOfShip; k++) {
+          if (j + k < 7) {
+            boardSquares[i * 7 + j + k].classList.remove('valid-hover');
+            boardSquares[i * 7 + j + k].classList.add('invalid-hover');
+          }
+        }
+      } else {
+        for (let k = 0; k < requiredLengthOfShip; k++) {
+          boardSquares[i * 7 + j + k].classList.remove('invalid-hover');
+          boardSquares[i * 7 + j + k].classList.add('valid-hover');
         }
       }
-      // else if any of the squares from j to j + requiredLengthOfShip - 1 have class 'ship' then they are invalid
-      else if (boardSquares[i * 7 + j + 1].classList.contains('ship')) {
-        for (let k = j; k < j + requiredLengthOfShip; k++) {
-          boardSquares[i * 7 + k].classList.add('invalid-hover');
+    } else if (direction === 'vertical') {
+      // if i + requiredLengthOfShip > 7, then the squares on the bottom on the same column are invalid
+      if (i + requiredLengthOfShip > 7) {
+        for (let k = 0; k < requiredLengthOfShip; k++) {
+          if (i + k < 7) {
+            boardSquares[(i + k) * 7 + j].classList.remove('valid-hover');
+            boardSquares[(i + k) * 7 + j].classList.add('invalid-hover');
+          }
         }
-      }
-      // else the squares from j to j + requiredLengthOfShip - 1 are valid
-      else {
-        for (let k = j; k < j + requiredLengthOfShip; k++) {
-          boardSquares[i * 7 + k].classList.add('valid-hover');
+      } else {
+        for (let k = 0; k < requiredLengthOfShip; k++) {
+          boardSquares[(i + k) * 7 + j].classList.remove('invalid-hover');
+          boardSquares[(i + k) * 7 + j].classList.add('valid-hover');
         }
       }
     }
-    if (direction === 'vertical') {
-      // if i + requiredLengthOfShip - 1 > 6 then squares below on j are invalid
-      // squares from i to i + requiredLengthOfShip - 1 within i < 7 are invalid
-      if (i + requiredLengthOfShip - 1 > 6) {
-        for (let k = i; k < 7; k++) {
-          boardSquares[k * 7 + j].classList.add('invalid-hover');
+    if (direction === 'horizontal') {
+      // if the squares from j to j + requiredLengthOfShip contain a ship, then the squares and the squares to the right are invalid
+      for (let k = 0; k < requiredLengthOfShip; k++) {
+        if (boardSquares[i * 7 + j + k].classList.contains('ship')) {
+          for (let l = 0; l < requiredLengthOfShip; l++) {
+            if (j + l < 7) {
+              boardSquares[i * 7 + j + l].classList.remove('valid-hover');
+              boardSquares[i * 7 + j + l].classList.add('invalid-hover');
+            }
+          }
         }
       }
-      // else if any of the squares from i to i + requiredLengthOfShip - 1 have class 'ship' then they are invalid
-      else if (boardSquares[(i + 1) * 7 + j].classList.contains('ship')) {
-        for (let k = i; k < i + requiredLengthOfShip; k++) {
-          boardSquares[k * 7 + j].classList.add('invalid-hover');
-        }
-      }
-      // else the squares from i to i + requiredLengthOfShip - 1 are valid
-      else {
-        for (let k = i; k < i + requiredLengthOfShip; k++) {
-          boardSquares[k * 7 + j].classList.add('valid-hover');
+    } else if (direction === 'vertical') {
+      // if the squares from i to i + requiredLengthOfShip contain a ship, then the squares on the bottom on the same column are invalid
+      for (let k = 0; k < requiredLengthOfShip; k++) {
+        if (boardSquares[(i + k) * 7 + j].classList.contains('ship')) {
+          for (let l = 0; l < requiredLengthOfShip; l++) {
+            if (i + l < 7) {
+              boardSquares[(i + l) * 7 + j].classList.remove('valid-hover');
+              boardSquares[(i + l) * 7 + j].classList.add('invalid-hover');
+            }
+          }
         }
       }
     }
   }
-
   static updateReferenceBoardAfterAttack(targetBoard, displayBoard, i, j) {
     if (targetBoard.board[i][j] === 'empty') {
       displayBoard[i][j] = 'miss';
@@ -349,8 +357,6 @@ class UI {
     let newElement = toggleButton.cloneNode(true);
     newElement.style.cursor = 'default';
     toggleButton.parentNode.replaceChild(newElement, toggleButton);
-    document.removeEventListener('contextmenu', UI.changeToggleButton());
-    document.removeEventListener('contextmenu', UI.updateShipPlacementIndicators(e, requiredLengthOfShip));
   }
   static toggleComputerBoardVisibility() {
     const computerBoard = document.getElementById('computerBoardUIContainer');
