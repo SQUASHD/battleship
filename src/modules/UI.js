@@ -51,7 +51,7 @@ class UI {
     playerBoardUIContainer.setAttribute('class', 'boardUIContainer');
     computerBoardUIContainer.setAttribute('id', 'computerBoardUIContainer');
     computerBoardUIContainer.setAttribute('class', 'boardUIContainer');
-    computerBoardUIContainer.classList.add('hidden')
+    computerBoardUIContainer.classList.add('hidden');
 
     playerBoard.classList.add('board');
     playerBoard.setAttribute('id', 'playerBoard');
@@ -97,7 +97,14 @@ class UI {
     const boardSquares = playerBoard.querySelectorAll('.player-board-square');
     let direction = directionToggle.getAttribute('data-direction');
 
-    directionToggle.addEventListener('click', changeToggleButton());
+    directionToggle.addEventListener('click', (e) => {
+      changeToggleButton();
+    });
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      changeToggleButton();
+      UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
+    });
 
     boardSquares.forEach((square) => {
       square.addEventListener('click', (e) => {
@@ -106,16 +113,17 @@ class UI {
 
         if (square.classList.contains('valid-hover')) {
           playerboard.placeShip(player.shipFleet[0], i, j, direction, player);
+          UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
           UI.renderPlayerShips(playerboard);
 
           if (player.shipFleet[0] !== undefined) {
             requiredLengthOfShip = player.shipFleet[0].length;
           } else {
-            UI.toggleComputerBoardVisibility()
+            UI.toggleComputerBoardVisibility();
             UI.updateHeaders();
             UI.removeBoardSquareEventListeners();
             UI.removeToggleEventListeners();
-            computerboard.placeShipsRandomly(computer.shipFleet, computerboard.board)
+            computerboard.placeShipsRandomly(computer.shipFleet, computerboard.board);
             this.initAttackListeners(
               player,
               computer,
@@ -128,79 +136,13 @@ class UI {
         }
       });
       square.addEventListener('mouseenter', (e) => {
-
         boardSquares.forEach((square) => {
           square.classList.remove('valid-hover');
           square.classList.remove('invalid-hover');
         });
-
-        if (requiredLengthOfShip === 0) return;
-
-        const i = parseInt(e.target.getAttribute('data-i'));
-        const j = parseInt(e.target.getAttribute('data-j'));
-
-        // block to check if there exists a ship already in the way
-        if (direction === 'horizontal') {
-          if (j + requiredLengthOfShip > 7) {
-            for (let k = 0; k < requiredLengthOfShip; k++) {
-              if (boardSquares[i * 7 + j - k].classList.contains('ship')) {
-                for (let l = 0; l < requiredLengthOfShip; l++) {
-                  boardSquares[i * 7 + j - l].classList.add('invalid-hover');
-                }
-                return;
-              }
-            }
-          } else {
-            for (let k = 0; k < requiredLengthOfShip; k++) {
-              if (boardSquares[i * 7 + j + k].classList.contains('ship')) {
-                for (let l = 0; l < requiredLengthOfShip; l++) {
-                  boardSquares[i * 7 + j + l].classList.add('invalid-hover');
-                }
-                return;
-              }
-            }
-          }
-        } else {
-          if (i + requiredLengthOfShip > 7) {
-            for (let k = 0; k < requiredLengthOfShip; k++) {
-              if (boardSquares[(i - k) * 7 + j].classList.contains('ship')) {
-                for (let l = 0; l < requiredLengthOfShip; l++) {
-                  boardSquares[(i - l) * 7 + j].classList.add('invalid-hover');
-                }
-                return;
-              }
-            }
-          } else {
-            for (let k = 0; k < requiredLengthOfShip; k++) {
-              if (boardSquares[(i + k) * 7 + j].classList.contains('ship')) {
-                for (let l = 0; l < requiredLengthOfShip; l++) {
-                  boardSquares[(i + l) * 7 + j].classList.add('invalid-hover');
-                }
-                return;
-              }
-            }
-          }
-        }
-        // block to check if out of bounds
-        if (direction === 'horizontal' && j + requiredLengthOfShip > 7) {
-          for (let k = j; k < 7; k++) {
-            boardSquares[i * 7 + k].classList.add('invalid-hover');
-          }
-        } else if (direction === 'vertical' && i + requiredLengthOfShip > 7) {
-          for (let k = i; k < 7; k++) {
-            boardSquares[k * 7 + j].classList.add('invalid-hover');
-          }
-        } else {
-          for (let k = 0; k < requiredLengthOfShip; k++) {
-            if (direction === 'horizontal') {
-              boardSquares[i * 7 + j + k].classList.add('valid-hover');
-            } else {
-              boardSquares[(i + k) * 7 + j].classList.add('valid-hover');
-            }
-          }
-        }
+        UI.updateShipPlacementIndicators(e, requiredLengthOfShip);
       });
-      square.addEventListener('mouseleave', (e) => {
+      square.addEventListener('mouseleave', () => {
         boardSquares.forEach((square) => {
           square.classList.remove('valid-hover');
           square.classList.remove('invalid-hover');
@@ -209,17 +151,73 @@ class UI {
     });
 
     function changeToggleButton() {
-      return () => {
-        if (directionToggle.getAttribute('data-direction') === 'horizontal') {
-          directionToggle.setAttribute('data-direction', 'vertical');
-          directionToggle.textContent = 'Toggle: Vertical';
-          direction = 'vertical';
-        } else {
-          directionToggle.setAttribute('data-direction', 'horizontal');
-          directionToggle.textContent = 'Toggle: Horizontal';
-          direction = 'horizontal';
+      const directionToggle = document.getElementById('playerHeader');
+      if (directionToggle.getAttribute('data-direction') === 'horizontal') {
+        directionToggle.setAttribute('data-direction', 'vertical');
+        directionToggle.textContent = 'Toggle: Vertical';
+        direction = 'vertical';
+      } else {
+        directionToggle.setAttribute('data-direction', 'horizontal');
+        directionToggle.textContent = 'Toggle: Horizontal';
+        direction = 'horizontal';
+      }
+    }
+  }
+  static updateShipPlacementIndicators(e = null, requiredLengthOfShip = null) {
+    const playerBoard = document.getElementById('playerBoard');
+    const boardSquares = playerBoard.querySelectorAll('.player-board-square');
+    const directionToggle = document.getElementById('playerHeader');
+    let direction = directionToggle.getAttribute('data-direction');
+
+    const i = parseInt(e.target.getAttribute('data-i'));
+    const j = parseInt(e.target.getAttribute('data-j'));
+
+    boardSquares.forEach((square) => {
+      square.classList.remove('valid-hover');
+      square.classList.remove('invalid-hover');
+    });
+
+    if (direction === 'horizontal') {
+      // if j + requiredLengthOfShip - 1 > 6 then squares to the right on i are invalid
+      // squares from j to j + requiredLengthOfShip - 1 within j < 7 are invalid
+      if (j + requiredLengthOfShip - 1 > 6) {
+        for (let k = j; k < 7; k++) {
+          boardSquares[i * 7 + k].classList.add('invalid-hover');
         }
-      };
+      }
+      // else if any of the squares from j to j + requiredLengthOfShip - 1 have class 'ship' then they are invalid
+      else if (boardSquares[i * 7 + j + 1].classList.contains('ship')) {
+        for (let k = j; k < j + requiredLengthOfShip; k++) {
+          boardSquares[i * 7 + k].classList.add('invalid-hover');
+        }
+      }
+      // else the squares from j to j + requiredLengthOfShip - 1 are valid
+      else {
+        for (let k = j; k < j + requiredLengthOfShip; k++) {
+          boardSquares[i * 7 + k].classList.add('valid-hover');
+        }
+      }
+    }
+    if (direction === 'vertical') {
+      // if i + requiredLengthOfShip - 1 > 6 then squares below on j are invalid
+      // squares from i to i + requiredLengthOfShip - 1 within i < 7 are invalid
+      if (i + requiredLengthOfShip - 1 > 6) {
+        for (let k = i; k < 7; k++) {
+          boardSquares[k * 7 + j].classList.add('invalid-hover');
+        }
+      }
+      // else if any of the squares from i to i + requiredLengthOfShip - 1 have class 'ship' then they are invalid
+      else if (boardSquares[(i + 1) * 7 + j].classList.contains('ship')) {
+        for (let k = i; k < i + requiredLengthOfShip; k++) {
+          boardSquares[k * 7 + j].classList.add('invalid-hover');
+        }
+      }
+      // else the squares from i to i + requiredLengthOfShip - 1 are valid
+      else {
+        for (let k = i; k < i + requiredLengthOfShip; k++) {
+          boardSquares[k * 7 + j].classList.add('valid-hover');
+        }
+      }
     }
   }
 
@@ -246,7 +244,7 @@ class UI {
       square.classList.remove('invalid-hover', 'valid-hover', 'ship');
       const i = square.getAttribute('data-i');
       const j = square.getAttribute('data-j');
-      if (playerBoard.board[i][j] instanceof Ship) {;
+      if (playerBoard.board[i][j] instanceof Ship) {
         square.classList.add('ship');
       }
     });
@@ -338,7 +336,7 @@ class UI {
     boardSquares.forEach((square) => {
       let newElement = square.cloneNode(true);
       square.parentNode.replaceChild(newElement, square);
-      square.classList.remove('valid-hover')
+      square.classList.remove('valid-hover');
     });
   }
   static removeToggleEventListeners() {
@@ -355,13 +353,13 @@ class UI {
     computerBoard.style.display = 'flex';
     computerBoard.style.gridColumn = '2 / 3';
   }
-  
+
   static updateHeaders() {
     const subheader = document.getElementById('subheader');
     const playerHeader = document.getElementById('playerHeader');
     const computerHeader = document.getElementById('computerHeader');
-    playerHeader.setAttribute('class', 'board-header')
-    playerHeader.removeAttribute('data-direction')
+    playerHeader.setAttribute('class', 'board-header');
+    playerHeader.removeAttribute('data-direction');
     playerHeader.textContent = 'Your Board';
     computerHeader.textContent = 'Enemy Board';
     subheader.textContent = 'Sink Those Ships!';
@@ -378,7 +376,6 @@ class UI {
     });
 
     headerContainer.lastElementChild.remove();
-
 
     resetBtn.textContent = 'Play Again?';
     resetBtn.classList.add('reset-button');
