@@ -20,6 +20,16 @@ class Game {
   static getBoardSize() {
     return this.standardBoardSize;
   }
+  static computerTurn(computer, playerBoard, playerReferenceBoard) {
+    const attackCoordinates = computer.selectRandomSquare();
+    computer.attack(playerBoard, attackCoordinates[0], attackCoordinates[1]);
+    UI.updateReferenceBoardAfterAttack(
+      playerBoard,
+      playerReferenceBoard,
+      attackCoordinates[0],
+      attackCoordinates[1]
+    );
+  }
   static runGame() {
     Game.gameOver = false;
     const userInterface = new UI();
@@ -30,7 +40,6 @@ class Game {
     p1Board.placeShipsRandomly(p1.shipFleet);
     p2Board.placeShipsRandomly(p2.shipFleet);
     UI.renderPlayerShips(p1Board);
-    // UI.renderComputerships(p2Board);
     UI.initAttackListeners(
       p1,
       p2,
@@ -39,7 +48,6 @@ class Game {
       userInterface.computerReferenceBoard,
       userInterface.playerReferenceBoard
     );
-    UI.renderBoard(userInterface.computerReferenceBoard, 'computer');
   }
 }
 

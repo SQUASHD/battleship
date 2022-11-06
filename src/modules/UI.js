@@ -147,7 +147,7 @@ class UI {
           return
         }
         if (!Game.isGameOver()) {
-          UI.computerTurn(computer, playerBoard, playerReferenceBoard);
+          Game.computerTurn(computer, playerBoard, playerReferenceBoard);
           UI.renderBoard(playerReferenceBoard, 'player');
         }
         Game.checkGameOver(playerBoard, computerboard);
@@ -170,16 +170,6 @@ class UI {
       let newElement = square.cloneNode(true);
       square.parentNode.replaceChild(newElement, square);
     });
-  }
-  static computerTurn(computer, playerBoard, playerReferenceBoard) {
-    const attackCoordinates = computer.selectRandomSquare();
-    computer.attack(playerBoard, attackCoordinates[0], attackCoordinates[1]);
-    UI.updateReferenceBoardAfterAttack(
-      playerBoard,
-      playerReferenceBoard,
-      attackCoordinates[0],
-      attackCoordinates[1]
-    );
   }
   static displayResult(result) {
     UI.removeEventListenersBoardSquares();
